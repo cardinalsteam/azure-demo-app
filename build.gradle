@@ -1,0 +1,53 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.home.azure.demo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//azure blob api's
+	implementation 'com.azure:azure-storage-blob:12.16.0'
+	implementation 'com.microsoft.azure:azure-storage:8.4.0'
+
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+
+	// https://mvnrepository.com/artifact/org.jsonschema2pojo/jsonschema2pojo-gradle-plugin
+	implementation group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '0.4.0'
+
+	// https://mvnrepository.com/artifact/com.zaxxer/HikariCP
+	implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.0'
+
+
+	// https://mvnrepository.com/artifact/com.yugabyte/jdbc-yugabytedb
+	implementation group: 'com.yugabyte', name: 'jdbc-yugabytedb', version: '42.3.0'
+
+
+
+	//azure cognitive service api
+	// https://mvnrepository.com/artifact/com.microsoft.cognitiveservices.speech/client-jar-sdk
+	implementation group: 'com.microsoft.cognitiveservices.speech', name: 'client-jar-sdk', version: '1.14.0'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
