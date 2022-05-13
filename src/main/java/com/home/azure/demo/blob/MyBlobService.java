@@ -119,18 +119,19 @@ try {
     }
 */
 
-    public void uploadFile(MultipartFile multipartFile){
+    public void uploadFile(MultipartFile multipartFile, String audioFilenameRequest){
        // String localFolderPath = "C:\\Users\\erman\\Downloads\\audiofolder\\";
         try {
             byte[] bytes = multipartFile.getBytes();
             System.out.println("lenght:: " + bytes.length);
-            String audioFileName = multipartFile.getOriginalFilename();
+            String audioFileName = audioFilenameRequest;
 
             CloudBlobContainer containerReference = getCloudBlobContainer();
 
             //Getting a blob reference
 
             CloudBlockBlob blockBlobReference = containerReference.getBlockBlobReference(audioFileName);
+
 
             //Creating blob and uploading file to it
             //System.out.println("Uploading the sample file, Absolute path: "+sourceFile.getAbsolutePath() );

@@ -1,12 +1,12 @@
 package com.home.azure.demo.controller;
 
+import com.home.azure.demo.PronunciationBlob;
 import com.home.azure.demo.domain.Employee;
 import com.home.azure.demo.service.NamePronunciationService;
+import org.apache.naming.factory.SendMailFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,18 +74,34 @@ public class NamePronunciationController {
     @PostMapping("/pronunce")
 
     public List<Employee> pronunce(@RequestBody final String employee) {
-        List<Employee> employees = new ArrayList<>();
-        Employee responseObj = namePronunciationService.pronunce(employee);
-        if(null!=responseObj){
-           employees.add(responseObj);
+        Employee emp = namePronunciationService.pronunce(employee);
+        List<Employee> emplist = new ArrayList<>();
+        if(emp != null){
+            emplist.add(emp);
         }
-        return employees;
+        return emplist;
 
     }
 
     @PostMapping("/saveemployee")
 
-    public void saveEmployee(@RequestBody final String employee) {
-        namePronunciationService.insertEmployeeRecord(employee);
+    public String saveEmployee(
+            @RequestParam("file")MultipartFile file,
+            @RequestParam("name")String name,
+            @RequestParam("email")String email,
+            @RequestParam("uid")String uid) {
+        System.out.println(String.valueOf((file)));
+        System.out.println(String.valueOf((name)));
+        System.out.println(String.valueOf((uid)));
+        System.out.println(String.valueOf((email)));
+        Employee emp = new Employee();
+        emp.setBlob("");
+        emp.setMultipartFile(file);
+        emp.setEmail(email);
+        emp.setUid(uid);
+        emp.setName(name);
+        namePronunciationService.insertEmployeeRecord(emp);
+        return "200";
     }
+
 }
