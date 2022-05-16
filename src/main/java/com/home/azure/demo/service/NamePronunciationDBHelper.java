@@ -24,10 +24,6 @@ public class NamePronunciationDBHelper {
         try {
             Statement stmt = getStatement();
             System.out.println("Connected to the YugabyteDB Cluster successfully.");
-            // stmt.execute("DROP TABLE IF EXISTS employee");
-            /*stmt.execute("CREATE TABLE IF NOT EXISTS employee" +
-                    "  (id int primary key, name varchar, age int, language text)");*/
-            // System.out.println("Created table employee");
 
             String insertStr = "INSERT INTO employees.employees  VALUES ('"+employee.getUid()+"','"+employee.getEmail()+"','"+employee.getName()+"','"+employee.getUid()+"')";
             String deleteStr = "DELETE FROM employees.employees WHERE email='"+employee.getEmail()+"' or uid='"+employee.getUid()+"'";
@@ -81,10 +77,12 @@ public class NamePronunciationDBHelper {
             e.printStackTrace();
         }
 
-        byte[] blob = blobService.downloadFile(employee.getBlob());
-        String blobString = new String(blob);
-        employee.setBlob(blobString);
-        employee.setBlobByte(blob);
+        if(employee != null) {
+            byte[] blob = blobService.downloadFile(employee.getBlob());
+            String blobString = new String(blob);
+            employee.setBlob(blobString);
+            employee.setBlobByte(blob);
+        }
         return  employee;
     }
 

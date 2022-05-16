@@ -63,64 +63,7 @@ List<String> blobNames = new ArrayList<>();
         return  blobNames;
     }
 
-/*
-    public String uploadBlob(String empId, String fileName, byte[] fileContents)  {
-        //List<String> blobNames = new ArrayList<>();
-
-
-            //BlobContainerClient containerClient = containerClient();
-            // containerClient.getb
-            // containerClient.sa
-try {
-    // Create the container if it does not exist with public access.
-    //storageConnectionString = the following combinition;
-    //"DefaultEndpointsProtocol=https;" +
-    //"AccountName=<account-name>;" +
-    //"AccountKey=<account-key>";
-
-    CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
-    CloudBlobClient cloudBlobClient = cloudStorageAccount.createCloudBlobClient();
-    CloudBlobContainer containerReference = cloudBlobClient.getContainerReference(containerName);
-    containerReference.createIfNotExists(BlobContainerPublicAccessType.CONTAINER, new BlobRequestOptions(), new OperationContext());
-
-    //Creating a sample file
-    File sourceFile = File.createTempFile("sampleFile", ".txt");
-    System.out.println("Creating a sample file at: " + sourceFile.toString());
-    Writer output = new BufferedWriter(new FileWriter(sourceFile));
-    output.write("Hello Azure!");
-    output.close();
-
-    //Getting a blob reference
-
-    CloudBlockBlob blockBlobReference = containerReference.getBlockBlobReference(sourceFile.getName());
-
-    //Creating blob and uploading file to it
-    System.out.println("Uploading the sample file, Absolute path: "+sourceFile.getAbsolutePath() );
-    blockBlobReference.uploadFromFile(sourceFile.getAbsolutePath());
-    // blockBlobReference.upload
-
-    //Listing contents of container
-    for (ListBlobItem blobItem : containerReference.listBlobs()) {
-        System.out.println("URI of blob is: " + blobItem.getUri());
-
-    }
-}catch (IOException io){
-
-} catch (URISyntaxException e) {
-    e.printStackTrace();
-} catch (InvalidKeyException e) {
-    e.printStackTrace();
-} catch (StorageException e) {
-    e.printStackTrace();
-}
-
-
-        return  "";
-    }
-*/
-
     public void uploadFile(String blob, String audioFilenameRequest){
-       // String localFolderPath = "C:\\Users\\erman\\Downloads\\audiofolder\\";
         try {
             byte[] bytes = blob.getBytes();
             System.out.println("lenght:: " + bytes.length);
@@ -132,15 +75,9 @@ try {
 
             CloudBlockBlob blockBlobReference = containerReference.getBlockBlobReference(audioFileName);
 
-
-            //Creating blob and uploading file to it
-            //System.out.println("Uploading the sample file, Absolute path: "+sourceFile.getAbsolutePath() );
             blockBlobReference.uploadFromByteArray(bytes,0,bytes.length);
             System.out.println("upload to Azure cloud blob is done!!!!");
-            // blockBlobReference.upload
 
-           /* Path path = Paths.get(localFolderPath + multipartFile.getOriginalFilename());
-            Files.write(path,bytes);*/
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,16 +94,10 @@ try {
         File downloadedFile = null;
         byte[] audioByteArray = new byte[472179];
         try {
-            // byte[] bytes = multipartFile.getBytes();
-            // String audioFileName = multipartFile.getOriginalFilename();
 
             CloudBlobContainer containerReference = getCloudBlobContainer();
-
             //Getting a blob reference
-
             CloudBlockBlob blockBlobReference = containerReference.getBlockBlobReference(audioFileName);
-           // downloadedFile = new File(audioFileName);
-            //byte [] b = new byte[472179];
             blockBlobReference.downloadToByteArray(audioByteArray,0);
             System.out.println("download from Azure cloud blob is done!!!!:: Size : " + audioByteArray.length);
             this.array2 = audioByteArray;
@@ -190,9 +121,6 @@ try {
 
     //Using Azure text to speech service sdk.
     public void textToSpeech(String text){
-        //create a azure speech resource/speech services, and get the key from there.
-        /*String speechSubscriptionKey = "2f6f7536157744cea209f4398d39cf12";
-        String serviceRegion = "westus2";*/
 makeConnectionUsingYbClusterAwareDataSource();
         String speechSubscriptionKey = "102cb5eceb6d42e6952535c67884693b";
 
@@ -278,34 +206,5 @@ makeConnectionUsingYbClusterAwareDataSource();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-        /*Properties poolProperties = new Properties();
-        poolProperties.setProperty("dataSourceClassName", "com.yugabyte.ysql.YBClusterAwareDataSource");
-        //the pool will create  10 connections to the servers
-        poolProperties.setProperty("maximumPoolSize", String.valueOf(10));
-        poolProperties.setProperty("dataSource.serverName", "20.121.116.153");
-        poolProperties.setProperty("dataSource.portNumber", "5433");
-        poolProperties.setProperty("dataSource.databaseName", "yugabyte");
-        poolProperties.setProperty("dataSource.user", "yugabyte");
-        poolProperties.setProperty("dataSource.password", "Hackathon22!");
-        // If you want to provide additional end points
-        String additionalEndpoints = "20.62.193.199:5433,20.119.92.88:5433";
-        poolProperties.setProperty("dataSource.additionalEndpoints", additionalEndpoints);
-
-        HikariConfig config = new HikariConfig(poolProperties);
-        config.validate();
-        HikariDataSource hikariDataSource = new HikariDataSource(config);
-
-        System.out.println("Wait for some time for Hikari Pool to setup and create the connections...");
-        System.out.println("You can verify the load balancing by visiting http://<host>:13000/rpcz as discussed before.");
-        System.out.println("Enter a integer to continue once verified:");
-        int x = new Scanner(System.in).nextInt();
-
-        System.out.println("Closing the Hikari Connection Pool!!");
-        hikariDataSource.close();*/
-
     }
-
-
 }

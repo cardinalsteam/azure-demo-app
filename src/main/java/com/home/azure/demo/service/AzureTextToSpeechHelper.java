@@ -61,10 +61,10 @@ public class AzureTextToSpeechHelper {
             e.printStackTrace();
             System.out.println("ExecutionException exception: " + e.getMessage());
         }
-        byte[] base64 = Base64.encodeBase64(chunks);
+        String base64String = Base64.encodeBase64String(chunks);
         Employee employee = new Employee();
         String chunkSrtring = new String(chunks);
-        employee.setBlob(chunkSrtring);
+        employee.setBlob(base64String);
         return employee;
     }
 }

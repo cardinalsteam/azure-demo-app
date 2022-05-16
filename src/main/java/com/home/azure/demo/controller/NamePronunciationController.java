@@ -21,58 +21,7 @@ public class NamePronunciationController {
         this.namePronunciationService = namePronunciationService;
     }
 
-
-    @GetMapping("/message")
-    public String message(String blob) {
-
-
-        return "This application is deployed in azure !";
-    }
-
-   /* @GetMapping("/allblobnames")
-    public List<String> getBlobNames() {
-        return myBlobService.listBlobs();
-    }
-
-    @GetMapping("/download")
-    public ByteArrayOutputStream downloadAudio() {
-        byte[] bytes = myBlobService.downloadFile("cat.png");
-        ByteArrayOutputStream baos = null;
-        //convert to image if you want
-
-        try {
-            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-            BufferedImage bImage2 = ImageIO.read(bis);
-            //ImageIO.write(bImage2, "png", new File("output.jpg") );
-            baos = new ByteArrayOutputStream();
-            ImageIO.write(bImage2, "png", baos);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return baos;
-    }
-
-    @PostMapping("/audiofile")
-    public @ResponseBody
-    String uploadBlob(@RequestParam("file") MultipartFile multipartFile) {
-        myBlobService.uploadFile(multipartFile);
-        return "";
-    }
-
-    @GetMapping("/texttospeech")
-    public void textToSpeech() {
-        List<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList("Ravi Garlapati", "Mansoor Altaf", "Daniel Martinez", "Sarita Shetty"));
-        //String name = ;
-        for (String name : list) {
-            myBlobService.textToSpeech(name);
-        }
-
-    }*/
-
     @PostMapping("/pronunce")
-
     public List<Employee> pronunce(@RequestBody final String employee) {
         Employee emp = namePronunciationService.pronunce(employee);
         List<Employee> emplist = new ArrayList<>();
@@ -84,7 +33,6 @@ public class NamePronunciationController {
     }
 
     @PostMapping("/saveemployee")
-
     public String saveEmployee(
             @RequestParam("blob")String blob,
             @RequestParam("name")String name,
@@ -101,5 +49,4 @@ public class NamePronunciationController {
         namePronunciationService.insertEmployeeRecord(emp);
         return "200";
     }
-
 }
