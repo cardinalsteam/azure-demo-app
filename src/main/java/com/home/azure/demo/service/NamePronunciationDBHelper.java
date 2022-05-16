@@ -1,6 +1,8 @@
 package com.home.azure.demo.service;
 
+import com.home.azure.demo.blob.MyBlobService;
 import com.home.azure.demo.domain.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,19 +16,20 @@ public class NamePronunciationDBHelper {
     @Value("${azure.ybdriver}")
     private String ybdriver;
 
+    @Autowired
+    MyBlobService blobService;
+
     public  void insertEmpoyeeRecord(Employee employee) {
 
         try {
             Statement stmt = getStatement();
             System.out.println("Connected to the YugabyteDB Cluster successfully.");
-            // stmt.execute("DROP TABLE IF EXISTS employee");
-            /*stmt.execute("CREATE TABLE IF NOT EXISTS employee" +
-                    "  (id int primary key, name varchar, age int, language text)");*/
-            // System.out.println("Created table employee");
 
-            String insertStr = "INSERT INTO employees.employees  VALUES ('"+employee.getUid()+"','"+employee.getEmail()+"','"+employee.getName()+"','"+employee.getBlob()+"')";
-
+            String insertStr = "INSERT INTO employees.employees  VALUES ('"+employee.getUid()+"','"+employee.getEmail()+"','"+employee.getName()+"','"+employee.getUid()+"')";
+            String deleteStr = "DELETE FROM employees.employees WHERE email='"+employee.getEmail()+"' or uid='"+employee.getUid()+"'";
+            stmt.execute(deleteStr);
             stmt.execute(insertStr);
+            blobService.uploadFile(employee.getBlob(), employee.getUid());
             System.out.println("EXEC: " + insertStr);
 
             ResultSet rs = stmt.executeQuery("select * from employees.employees");
@@ -73,6 +76,13 @@ public class NamePronunciationDBHelper {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        if(employee != null) {
+            byte[] blob = blobService.downloadFile(employee.getBlob());
+            String blobString = new String(blob);
+            employee.setBlob(blobString);
+            employee.setBlobByte(blob);
+        }
         return  employee;
     }
 
@@ -100,6 +110,11 @@ public class NamePronunciationDBHelper {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        byte[] blob = blobService.downloadFile(employee.getBlob());
+        String blobString = new String(blob);
+        employee.setBlob(blobString);
+        employee.setBlobByte(blob);
         return employee;
     }
+
 }
