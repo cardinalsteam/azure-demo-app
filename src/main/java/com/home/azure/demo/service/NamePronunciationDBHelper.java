@@ -33,7 +33,7 @@ public class NamePronunciationDBHelper {
             String deleteStr = "DELETE FROM employees.employees WHERE email='"+employee.getEmail()+"' or uid='"+employee.getUid()+"'";
             stmt.execute(deleteStr);
             stmt.execute(insertStr);
-            blobService.uploadFile(employee.getMultipartFile(), employee.getUid());
+            blobService.uploadFile(employee.getBlob(), employee.getUid());
             System.out.println("EXEC: " + insertStr);
 
             ResultSet rs = stmt.executeQuery("select * from employees.employees");
@@ -82,6 +82,8 @@ public class NamePronunciationDBHelper {
         }
 
         byte[] blob = blobService.downloadFile(employee.getBlob());
+        String blobString = new String(blob);
+        employee.setBlob(blobString);
         employee.setBlobByte(blob);
         return  employee;
     }

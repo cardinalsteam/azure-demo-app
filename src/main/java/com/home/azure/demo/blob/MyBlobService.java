@@ -26,10 +26,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -45,6 +42,9 @@ public class MyBlobService {
     private String containerName;
     @Value("${azure.myblob.storageconnectionstring}")
     private String storageConnectionString;
+
+    byte[] array1;
+    byte[] array2;
 
     private BlobContainerClient containerClient(){
 
@@ -119,13 +119,13 @@ try {
     }
 */
 
-    public void uploadFile(MultipartFile multipartFile, String audioFilenameRequest){
+    public void uploadFile(String blob, String audioFilenameRequest){
        // String localFolderPath = "C:\\Users\\erman\\Downloads\\audiofolder\\";
         try {
-            byte[] bytes = multipartFile.getBytes();
+            byte[] bytes = blob.getBytes();
             System.out.println("lenght:: " + bytes.length);
             String audioFileName = audioFilenameRequest;
-
+            this.array1 = bytes;
             CloudBlobContainer containerReference = getCloudBlobContainer();
 
             //Getting a blob reference
@@ -169,8 +169,13 @@ try {
             //byte [] b = new byte[472179];
             blockBlobReference.downloadToByteArray(audioByteArray,0);
             System.out.println("download from Azure cloud blob is done!!!!:: Size : " + audioByteArray.length);
-
-
+            this.array2 = audioByteArray;
+           if(Arrays.equals(array1, array2)){
+               System.out.println("arrays are equal");
+           }
+           else{
+               System.out.println("arrays are not equal");
+           }
 
         } catch (URISyntaxException e) {
             e.printStackTrace();

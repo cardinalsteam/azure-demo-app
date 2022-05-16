@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.home.azure.demo.PronunciationBlob;
 import com.home.azure.demo.domain.Employee;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,10 @@ public class NamePronunciationService {
                 empToReturn = new Employee();
                empToReturn = azureTextToSpeechHelper.callAzureToTransformTextToSpeech(employeeNameToSpeak);
 
-            }else if(employee.getUid()!=null){
+            }else if(employee.getUid()!=null && !StringUtils.isBlank(employee.getUid())){
                 //search an employee in the DB using uid. if present then get employee information
                 empToReturn = namePronunciationDBHelper.searchEmployeeByUid(employee.getUid().trim());
-            }else if(employee.getEmail()!=null){
+            }else if(employee.getEmail()!=null && !StringUtils.isBlank(employee.getEmail())){
                 //search an employee in the DB using email. if present then get employee information
                 empToReturn = namePronunciationDBHelper.searchEmployeeByEmail(employee.getEmail().trim());
             }else{

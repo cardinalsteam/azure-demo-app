@@ -86,17 +86,15 @@ public class NamePronunciationController {
     @PostMapping("/saveemployee")
 
     public String saveEmployee(
-            @RequestParam("file")MultipartFile file,
+            @RequestParam("blob")String blob,
             @RequestParam("name")String name,
             @RequestParam("email")String email,
             @RequestParam("uid")String uid) {
-        System.out.println(String.valueOf((file)));
         System.out.println(String.valueOf((name)));
         System.out.println(String.valueOf((uid)));
         System.out.println(String.valueOf((email)));
         Employee emp = new Employee();
-        emp.setBlob("");
-        emp.setMultipartFile(file);
+        emp.setBlob(blob);
         emp.setEmail(email);
         emp.setUid(uid);
         emp.setName(name);
